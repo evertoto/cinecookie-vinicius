@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Entre na sua conta CineCookie.">
+    <title th:text="${pageTitle}">Entrar — CineCookie</title>
+    <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="auth-page">
+<main class="auth-layout">
+    <a class="auth-back" th:href="@{/}" aria-label="Voltar para a página inicial"><span aria-hidden="true">←</span> Voltar</a>
+
+    <section class="auth-art" aria-label="Bem-vindo ao CineCookie">
+        <div class="auth-art-posters" aria-hidden="true">
+            <img th:src="@{/images/posters/homem-aranha.webp}" alt="">
+            <img th:src="@{/images/posters/a-odisseia.webp}" alt="">
+            <img th:src="@{/images/posters/shaolin.webp}" alt="">
+        </div>
+        <div class="auth-art-overlay"></div>
+        <div class="auth-art-content">
+            <div class="auth-brand-mark"><img th:src="@{/images/logo.png}" alt=""></div>
+            <p class="eyebrow"><span></span> CINECOOKIE</p>
+            <h1>Boas histórias<br>merecem ser <em>lembradas.</em></h1>
+            <p>Seu diário de cinema está esperando por você.</p>
+            <blockquote>“A vida se move muito rápido. Se você não parar e olhar em volta de vez em quando, pode perdê-la.”</blockquote>
+        </div>
+    </section>
+
+    <section class="auth-panel" aria-labelledby="login-title">
+        <div class="auth-form-wrap">
+            <div class="mobile-auth-brand">
+                <span class="brand-mark"><img th:src="@{/images/logo.png}" alt=""></span>
+                <strong>CineCookie</strong>
+            </div>
+            <p class="eyebrow"><span></span> BEM-VINDO DE VOLTA</p>
+            <h2 id="login-title">Entre na sua conta</h2>
+            <p class="auth-intro">Continue de onde parou e descubra sua próxima história.</p>
+
+            <form class="auth-form" data-demo-form data-success="Página pronta! A autenticação será conectada na etapa do backend.">
+                <label for="email">E-mail</label>
+                <div class="input-wrap">
+                    <span aria-hidden="true">@</span>
+                    <input id="email" name="email" type="email" placeholder="voce@email.com" autocomplete="email" required>
+                </div>
+
+                <div class="label-row">
+                    <label for="password">Senha</label>
+                    <a href="#" data-placeholder-link>Esqueci minha senha</a>
+                </div>
+                <div class="input-wrap">
+                    <span aria-hidden="true">●</span>
+                    <input id="password" name="password" type="password" placeholder="Digite sua senha" autocomplete="current-password" minlength="6" required>
+                    <button class="password-toggle" type="button" data-password-toggle="password" aria-label="Mostrar senha">Mostrar</button>
+                </div>
+
+                <label class="check-row">
+                    <input type="checkbox" name="remember">
+                    <span>Lembrar de mim neste dispositivo</span>
+                </label>
+
+                <button class="button button-primary button-submit" type="submit">Entrar <span aria-hidden="true">→</span></button>
+                <p class="form-status" role="status" hidden></p>
+            </form>
+
+            <p class="auth-switch">Ainda não tem uma conta? <a th:href="@{/cadastro}">Cadastre-se grátis</a></p>
+        </div>
+    </section>
+</main>
+<script th:src="@{/js/app.js}" defer></script>
+</body>
+</html>

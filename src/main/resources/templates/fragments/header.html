@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="site-header" th:fragment="siteHeader(activePage)">
+    <div class="header-inner shell">
+        <a class="brand" th:href="@{/}" aria-label="CineCookie — página inicial">
+            <span class="brand-mark" aria-hidden="true">
+                <img th:src="@{/images/logo.png}" alt="">
+            </span>
+            <span class="brand-copy">
+                <span class="brand-name">CineCookie</span>
+                <span class="brand-tagline">seu diário de cinema</span>
+            </span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false"
+                aria-controls="main-navigation">
+            <span></span><span></span><span></span>
+        </button>
+
+        <nav class="main-nav" id="main-navigation" aria-label="Navegação principal">
+            <div class="nav-links">
+                <a th:href="@{/}" th:classappend="${activePage == 'home'} ? ' is-active'">Início</a>
+                <a th:href="@{/#filmes}">Filmes</a>
+                <a th:href="@{/#atividade}">Comunidade</a>
+            </div>
+            <div class="nav-actions">
+                <a class="button button-ghost" th:href="@{/login}">Entrar</a>
+                <a class="button button-primary button-small" th:href="@{/cadastro}">Criar conta</a>
+            </div>
+        </nav>
+    </div>
+</header>
+</body>
+</html>

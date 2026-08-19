@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Crie sua conta CineCookie e comece seu diário de cinema.">
+    <title th:text="${pageTitle}">Criar conta — CineCookie</title>
+    <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="auth-page">
+<main class="auth-layout">
+    <a class="auth-back" th:href="@{/}" aria-label="Voltar para a página inicial"><span aria-hidden="true">←</span> Voltar</a>
+
+    <section class="auth-art" aria-label="Crie seu diário CineCookie">
+        <div class="auth-art-posters" aria-hidden="true">
+            <img th:src="@{/images/posters/patrulha-canina.webp}" alt="">
+            <img th:src="@{/images/posters/a-odisseia.webp}" alt="">
+            <img th:src="@{/images/posters/amigas-sem-filtro.webp}" alt="">
+        </div>
+        <div class="auth-art-overlay"></div>
+        <div class="auth-art-content">
+            <div class="auth-brand-mark"><img th:src="@{/images/logo.png}" alt=""></div>
+            <p class="eyebrow"><span></span> CINECOOKIE</p>
+            <h1>Sua história com<br>o cinema começa <em>aqui.</em></h1>
+            <ul class="auth-perks">
+                <li><span>✓</span><div><strong>Seu diário, do seu jeito</strong><small>Registre cada filme e cada memória.</small></div></li>
+                <li><span>★</span><div><strong>Avalie sem complicação</strong><small>Dê notas e escreva suas impressões.</small></div></li>
+                <li><span>◎</span><div><strong>Encontre sua comunidade</strong><small>Descubra filmes através de outras pessoas.</small></div></li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="auth-panel" aria-labelledby="signup-title">
+        <div class="auth-form-wrap signup-wrap">
+            <div class="mobile-auth-brand">
+                <span class="brand-mark"><img th:src="@{/images/logo.png}" alt=""></span>
+                <strong>CineCookie</strong>
+            </div>
+            <p class="eyebrow"><span></span> PRIMEIRO TAKE</p>
+            <h2 id="signup-title">Crie sua conta</h2>
+            <p class="auth-intro">É grátis, rápido e o começo de uma ótima história.</p>
+
+            <form class="auth-form" data-demo-form data-success="Cadastro pronto! Os dados serão persistidos na etapa do backend.">
+                <div class="field-grid">
+                    <div>
+                        <label for="name">Nome</label>
+                        <div class="input-wrap"><span aria-hidden="true">○</span><input id="name" name="name" type="text" placeholder="Seu nome" autocomplete="name" minlength="2" required></div>
+                    </div>
+                    <div>
+                        <label for="username">Usuário</label>
+                        <div class="input-wrap"><span aria-hidden="true">@</span><input id="username" name="username" type="text" placeholder="seuusuario" autocomplete="username" pattern="[A-Za-z0-9._-]{3,20}" required></div>
+                    </div>
+                </div>
+
+                <label for="signup-email">E-mail</label>
+                <div class="input-wrap"><span aria-hidden="true">✉</span><input id="signup-email" name="email" type="email" placeholder="voce@email.com" autocomplete="email" required></div>
+
+                <label for="signup-password">Senha</label>
+                <div class="input-wrap">
+                    <span aria-hidden="true">●</span>
+                    <input id="signup-password" name="password" type="password" placeholder="Mínimo de 8 caracteres" autocomplete="new-password" minlength="8" required>
+                    <button class="password-toggle" type="button" data-password-toggle="signup-password" aria-label="Mostrar senha">Mostrar</button>
+                </div>
+                <div class="password-strength" aria-hidden="true"><span></span><span></span><span></span></div>
+
+                <label class="check-row terms-row">
+                    <input type="checkbox" name="terms" required>
+                    <span>Li e concordo com os <a href="#" data-placeholder-link>Termos de Uso</a> e a <a href="#" data-placeholder-link>Política de Privacidade</a>.</span>
+                </label>
+
+                <button class="button button-primary button-submit" type="submit">Criar minha conta <span aria-hidden="true">→</span></button>
+                <p class="form-status" role="status" hidden></p>
+            </form>
+
+            <p class="auth-switch">Já faz parte da comunidade? <a th:href="@{/login}">Entrar</a></p>
+        </div>
+    </section>
+</main>
+<script th:src="@{/js/app.js}" defer></script>
+</body>
+</html>
