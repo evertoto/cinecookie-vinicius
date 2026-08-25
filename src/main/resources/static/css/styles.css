@@ -307,13 +307,13 @@ img {
 }
 
 .hero {
-    min-height: 690px;
+    min-height: auto;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(480px, 0.9fr);
     align-items: center;
     gap: 76px;
-    padding-top: 68px;
-    padding-bottom: 88px;
+    padding-top: 32px;
+    padding-bottom: 40px;
 }
 
 .eyebrow {
