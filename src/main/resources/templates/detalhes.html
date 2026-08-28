@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Detalhes do filme no CineCookie.">
+    <title th:text="${pageTitle}">Detalhes do filme — CineCookie</title>
+    <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: siteHeader(${activePage})}"></div>
+
+<main>
+    <section class="movie-section" aria-labelledby="movie-title">
+        <div class="shell">
+            <div class="section-heading">
+                <p class="eyebrow"><span></span> DETALHES</p>
+                <h2 id="movie-title" th:text="${movie.title}">Título do filme</h2>
+            </div>
+
+            <img th:src="${movie.poster}" th:alt="|Pôster de ${movie.title}|" loading="lazy">
+
+            <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:24px;">
+                <span><strong>Gênero</strong><span th:text="${movie.genre}">Ação • Aventura</span></span>
+                <span><strong>Duração</strong><span th:text="${movie.duration}">2h52</span></span>
+                <span><strong>Classificação</strong><span class="age-badge" th:text="${movie.ageRating}">12</span></span>
+                <span><strong>Nota</strong><span class="movie-score" th:text="${movie.score}">4.5</span></span>
+            </div>
+
+            <p class="movie-synopsis" style="margin-top:16px;">
+                Em uma jornada épica, um herói se lança ao desconhecido em busca de glória e redenção. O filme conta a história de
+                <strong th:text="${movie.title}">um filme</strong>, uma aventura que mistura emoção, suspense e momentos de
+                pura diversão. Descubra por que este título continua marcando o público de tempos em tempos.
+            </p>
+        </div>
+    </section>
+
+    <section class="community-section" id="atividades" aria-labelledby="reviews-title">
+        <div class="shell">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow"><span></span> COMUNIDADE</p>
+                    <h2 id="reviews-title">O que a comunidade está dizendo</h2>
+                </div>
+            </div>
+            <div class="review-grid">
+                <article class="review-card">
+                    <header>
+                        <span class="avatar avatar-copper">AC</span>
+                        <span>
+                            <strong>Ana Clara</strong>
+                            <small>assistiu <span th:text="${movie.title}">este filme</span></small>
+                        </span>
+                        <time datetime="2026-08-20">ontem</time>
+                    </header>
+                    <p>
+                        "Cinema do tamanho que a tela grande merece.
+                        <span th:text="${movie.title}">Este filme</span>
+                        tem tudo: ritmo, personagens e uma história que prende até nos momentos mais quietos."
+                    </p>
+                    <footer>
+                        <span class="stars" aria-label="5 de 5 estrelas">★★★★★</span>
+                        <span>♡ 28</span>
+                    </footer>
+                </article>
+                <article class="review-card">
+                    <header>
+                        <span class="avatar avatar-blue">RM</span>
+                        <span>
+                            <strong>Rafael Melo</strong>
+                            <small>assistiu <span th:text="${movie.title}">este filme</span></small>
+                        </span>
+                        <time datetime="2026-08-19">2 dias</time>
+                    </header>
+                    <p>
+                        "Divertido, original e cheio de personalidade.
+                        <span th:text="${movie.title}">O filme</span>
+                        é aquele tipo que faz todo mundo conversar na saída do cinema."
+                    </p>
+                    <footer>
+                        <span class="stars" aria-label="4 de 5 estrelas">★★★★<i>★</i></span>
+                        <span>♡ 19</span>
+                    </footer>
+                </article>
+                <article class="review-card">
+                    <header>
+                        <span class="avatar avatar-green">JS</span>
+                        <span>
+                            <strong>João Silva</strong>
+                            <small>assistiu <span th:text="${movie.title}">este filme</span></small>
+                        </span>
+                        <time datetime="2026-08-17">2 dias</time>
+                    </header>
+                    <p>
+                        "A ficha técnica soma ponto e o elenco entrega em cheio.
+                        <span th:text="${movie.title}">O longa</span>
+                        vale cada minuto da sessão."
+                    </p>
+                    <footer>
+                        <span class="stars" aria-label="5 de 5 estrelas">★★★★★</span>
+                        <span>♡ 34</span>
+                    </footer>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+<script th:src="@{/js/app.js}" defer></script>
+</body>
+</html>
