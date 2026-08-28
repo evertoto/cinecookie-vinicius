@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const search = document.querySelector('#movie-search');
     const chips = [...document.querySelectorAll('.filter-chip')];
-    const cards = [...document.querySelectorAll('.movie-card')];
+    const cards = [...document.querySelectorAll('.movie-table tr')];
     const count = document.querySelector('#movie-count');
     const empty = document.querySelector('#movie-empty');
     let activeFilter = 'all';

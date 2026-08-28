@@ -58,28 +58,43 @@
 
         <p class="movie-count" aria-live="polite"><span id="movie-count" th:text="${#lists.size(movies)}">6</span> filmes encontrados</p>
 
-        <div class="movie-grid" id="movie-grid">
-            <article class="movie-card" th:each="movie : ${movies}" th:attr="data-category=${movie.category},data-title=${movie.title}">
-                <a href="#" class="movie-card-link" data-placeholder-link th:attr="aria-label=|Ver detalhes de ${movie.title}|">
-                    <div class="movie-poster">
-                        <img th:src="${movie.poster}" th:alt="|Pôster de ${movie.title}|" loading="lazy">
-                        <span class="age-badge" th:text="${movie.ageRating}">12</span>
-                        <span class="watched-badge" aria-label="Filme assistido">✓</span>
-                        <div class="card-hover-copy">
-                            <span>Ver detalhes</span>
-                        </div>
-                    </div>
-                    <div class="movie-info">
-                        <h3 th:text="${movie.title}">Título do filme</h3>
-                        <p th:text="${movie.genre}">Gênero</p>
-                        <div class="movie-meta">
-                            <span th:text="${movie.duration}">2h00</span>
-                            <span class="movie-score"><span aria-hidden="true">★</span> <b th:text="${movie.score}">4.5</b></span>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
+        <table class="movie-table" id="movie-grid">
+            <thead>
+                <tr>
+                    <th>Pôster</th>
+                    <th>Título</th>
+                    <th>Gênero</th>
+                    <th>Duração</th>
+                    <th>Classificação</th>
+                    <th>Nota</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="movie : ${movies}"
+                    th:attr="data-category=${movie.category},data-title=${movie.title}">
+                    <td class="movie-poster">
+                        <a th:href="@{/filmes/{id}(id=${movie.id})}" class="movie-card-link">
+                            <img th:src="${movie.poster}" th:alt="|Pôster de ${movie.title}|" loading="lazy">
+                            <span class="age-badge" th:text="${movie.ageRating}">12</span>
+                            <span class="watched-badge" aria-label="Filme assistido">✓</span>
+                            <div class="card-hover-copy"><span>Ver detalhes</span></div>
+                        </a>
+                    </td>
+                    <td>
+                        <a th:href="@{/filmes/{id}(id=${movie.id})}" class="movie-card-link"
+                           th:attr="aria-label=|Ver detalhes de ${movie.title}|">
+                            <h3 th:text="${movie.title}">Título do filme</h3>
+                        </a>
+                    </td>
+                    <td th:text="${movie.genre}">Gênero</td>
+                    <td th:text="${movie.duration}">2h00</td>
+                    <td class="age-badge" th:text="${movie.ageRating}">12</td>
+                    <td>
+                        <span class="movie-score"><span aria-hidden="true">★</span> <b th:text="${movie.score}">4.5</b></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <div class="empty-state" id="movie-empty" hidden>
             <span aria-hidden="true">◉</span>
