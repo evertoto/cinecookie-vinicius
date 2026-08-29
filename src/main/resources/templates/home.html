@@ -59,6 +59,14 @@
         <p class="movie-count" aria-live="polite"><span id="movie-count" th:text="${#lists.size(movies)}">6</span> filmes encontrados</p>
 
         <table class="movie-table" id="movie-grid">
+            <colgroup>
+                <col style="width: 110px;"> <!-- Pôster -->
+                <col style="width: 26%;">    <!-- Título -->
+                <col style="width: 16%;">    <!-- Gênero -->
+                <col style="width: 12%;">    <!-- Duração -->
+                <col style="width: 14%;">    <!-- Classificação -->
+                <col style="width: 10%;">    <!-- Nota -->
+            </colgroup>
             <thead>
                 <tr>
                     <th>Pôster</th>
@@ -88,7 +96,7 @@
                     </td>
                     <td th:text="${movie.genre}">Gênero</td>
                     <td th:text="${movie.duration}">2h00</td>
-                    <td class="age-badge" th:text="${movie.ageRating}">12</td>
+                    <td class="classification-cell" th:text="${movie.ageRating}">12</td>
                     <td>
                         <span class="movie-score"><span aria-hidden="true">★</span> <b th:text="${movie.score}">4.5</b></span>
                     </td>

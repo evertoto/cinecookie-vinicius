@@ -24,6 +24,14 @@
             <p class="movie-count" aria-live="polite"><span id="movie-count" th:text="${#lists.size(movies)}">6</span> filmes encontrados</p>
 
             <table class="movie-table">
+                <colgroup>
+                    <col style="width: 110px;"> <!-- Pôster -->
+                    <col style="width: 26%;">    <!-- Título -->
+                    <col style="width: 16%;">    <!-- Gênero -->
+                    <col style="width: 12%;">    <!-- Duração -->
+                    <col style="width: 14%;">    <!-- Classificação -->
+                    <col style="width: 10%;">    <!-- Nota -->
+                </colgroup>
                 <thead>
                     <tr>
                         <th>Pôster</th>
