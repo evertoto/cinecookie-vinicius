@@ -12,24 +12,18 @@ public class PageController {
 
     private List<MovieView> getMovieList() {
         return List.of(
-                new MovieView("A Odisseia", "Ação • Aventura", "2h52", "14", "4.7",
-                        "a-odisseia",
-                        "/images/posters/a-odisseia.webp", "acao"),
-                new MovieView("Homem-Aranha: Um Novo Dia", "Ação • Fantasia", "2h24", "12", "4.5",
-                        "homem-aranha",
-                        "/images/posters/homem-aranha.webp", "acao"),
-                new MovieView("O Shaolin do Sertão 2", "Comédia", "1h46", "12", "4.3",
-                        "shaolin",
-                        "/images/posters/shaolin.webp", "comedia"),
-                new MovieView("Patrulha Canina: Uma Aventura Dino", "Animação • Infantil", "1h28", "L", "4.1",
-                        "patrulha-canina",
-                        "/images/posters/patrulha-canina.webp", "animacao"),
-                new MovieView("Authentic Games no Império Desconectado", "Ação • Animação", "1h11", "L", "3.9",
-                        "authentic-games",
-                        "/images/posters/authentic-games.webp", "animacao"),
-                new MovieView("Amigas sem Filtro", "Comédia", "1h37", "16", "3.8",
-                        "amigas-sem-filtro",
-                        "/images/posters/amigas-sem-filtro.webp", "comedia"));
+                new MovieView("a-odisseia", "A Odisseia", "Ação • Aventura", "2h52", "14", "4.7",
+                       "/images/posters/a-odisseia.webp", "acao"),
+                new MovieView("homem-aranha", "Homem-Aranha: Um Novo Dia", "Ação • Fantasia", "2h24", "12", "4.5",
+                       "/images/posters/homem-aranha.webp", "acao"),
+                new MovieView("shaolin", "O Shaolin do Sertão 2", "Comédia", "1h46", "12", "4.3",
+                       "/images/posters/shaolin.webp", "comedia"),
+                new MovieView("patrulha-canina", "Patrulha Canina: Uma Aventura Dino", "Animação • Infantil", "1h28", "L", "4.1",
+                       "/images/posters/patrulha-canina.webp", "animacao"),
+                new MovieView("authentic-games", "Authentic Games no Império Desconectado", "Ação • Animação", "1h11", "L", "3.9",
+                       "/images/posters/authentic-games.webp", "animacao"),
+                new MovieView("amigas-sem-filtro", "Amigas sem Filtro", "Comédia", "1h37", "16", "3.8",
+                       "/images/posters/amigas-sem-filtro.webp", "comedia"));
     }
 
     @GetMapping("/")
