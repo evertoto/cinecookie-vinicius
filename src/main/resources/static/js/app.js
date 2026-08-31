@@ -18,11 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const search = document.querySelector('#movie-search');
+    const searchValue = search ? localStorage.getItem('movieSearch') || '' : '';
+    if (search) search.value = searchValue;
     const chips = [...document.querySelectorAll('.filter-chip')];
     const cards = [...document.querySelectorAll('.movie-table tr')];
     const count = document.querySelector('#movie-count');
     const empty = document.querySelector('#movie-empty');
-    let activeFilter = 'all';
+    let activeFilter = (localStorage.getItem('activeFilter') || 'all');
 
     const normalize = (value) => value
         .normalize('NFD')
@@ -45,11 +47,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (empty) empty.hidden = visible !== 0;
     };
 
-    search?.addEventListener('input', applyMovieFilters);
+    search?.addEventListener('input', () => {
+        if (search) localStorage.setItem('movieSearch', search.value);
+        applyMovieFilters();
+    });
     chips.forEach((chip) => {
         chip.addEventListener('click', () => {
             activeFilter = chip.dataset.filter || 'all';
             chips.forEach((item) => item.classList.toggle('is-active', item === chip));
+            localStorage.setItem('activeFilter', activeFilter);
             applyMovieFilters();
         });
     });
