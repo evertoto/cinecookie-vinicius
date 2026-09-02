@@ -21,10 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchValue = search ? localStorage.getItem('movieSearch') || '' : '';
     if (search) search.value = searchValue;
     const chips = [...document.querySelectorAll('.filter-chip')];
-    const cards = [...document.querySelectorAll('.movie-table tr')];
+    const cards = [...document.querySelectorAll('.catalog-movie-card')];
     const count = document.querySelector('#movie-count');
     const empty = document.querySelector('#movie-empty');
     let activeFilter = (localStorage.getItem('activeFilter') || 'all');
+
+    if (!chips.some((chip) => chip.dataset.filter === activeFilter)) {
+        activeFilter = 'all';
+    }
+    chips.forEach((chip) => chip.classList.toggle('is-active', chip.dataset.filter === activeFilter));
 
     const normalize = (value) => value
         .normalize('NFD')
