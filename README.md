@@ -1,7 +1,10 @@
 # CineCookie
 
-Clone acadêmico do Letterboxd com identidade visual baseada no aplicativo
-CineCookie original.
+Equipe -
+    Luka de Souza Lima
+    Everton Fontes Alencar
+
+Clone acadêmico do Letterboxd com identidade visual baseada em cookies.
 
 ## Estrutura
 
