@@ -12,31 +12,60 @@
 <div th:replace="~{fragments/header :: siteHeader(${activePage})}"></div>
 
 <main>
-    <section class="movie-section" aria-labelledby="movie-title">
+    <section class="movie-detail-section" aria-labelledby="movie-title">
         <div class="shell">
-            <div class="section-heading">
-                <p class="eyebrow"><span></span> DETALHES</p>
-                <h2 id="movie-title" th:text="${movie.title}">Título do filme</h2>
+            <a class="detail-back" th:href="@{/filmes}"><span aria-hidden="true">←</span> Voltar ao catálogo</a>
+
+            <div class="movie-detail-hero">
+                <div class="detail-poster-card">
+                    <img th:src="${movie.poster}" th:alt="|Pôster de ${movie.title}|">
+                    <span class="detail-classification" th:text="${movie.ageRating}">12</span>
+                </div>
+
+                <div class="detail-content">
+                    <p class="eyebrow"><span></span> FILME EM DESTAQUE</p>
+                    <h1 id="movie-title" th:text="${movie.title}">Título do filme</h1>
+                    <p class="detail-lead">Uma história para assistir, avaliar e guardar no seu diário.</p>
+
+                    <div class="detail-rating" aria-label="Avaliação da comunidade">
+                        <strong th:text="${movie.score}">4.5</strong>
+                        <span><b aria-hidden="true">★★★★★</b> nota da comunidade</span>
+                    </div>
+
+                    <dl class="detail-meta">
+                        <div>
+                            <dt>Gênero</dt>
+                            <dd th:text="${movie.genre}">Ação • Aventura</dd>
+                        </div>
+                        <div>
+                            <dt>Duração</dt>
+                            <dd th:text="${movie.duration}">2h52</dd>
+                        </div>
+                        <div>
+                            <dt>Classificação</dt>
+                            <dd th:text="${movie.ageRating}">12</dd>
+                        </div>
+                    </dl>
+
+                    <div class="detail-synopsis">
+                        <span>Sinopse</span>
+                        <p>
+                            Em uma jornada épica, um herói se lança ao desconhecido em busca de glória e redenção.
+                            <strong th:text="${movie.title}">Este filme</strong> mistura emoção, suspense e momentos de pura
+                            diversão em uma história feita para a tela grande.
+                        </p>
+                    </div>
+
+                    <div class="detail-actions">
+                        <a class="button button-primary" href="#avaliacoes">Ler avaliações <span aria-hidden="true">↓</span></a>
+                        <a class="button button-ghost" th:href="@{/filmes}">Explorar outros filmes</a>
+                    </div>
+                </div>
             </div>
-
-            <img th:src="${movie.poster}" th:alt="|Pôster de ${movie.title}|" loading="lazy">
-
-            <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:24px;">
-                <span><strong>Gênero</strong><span th:text="${movie.genre}">Ação • Aventura</span></span>
-                <span><strong>Duração</strong><span th:text="${movie.duration}">2h52</span></span>
-                <span><strong>Classificação</strong><span class="age-badge" th:text="${movie.ageRating}">12</span></span>
-                <span><strong>Nota</strong><span class="movie-score" th:text="${movie.score}">4.5</span></span>
-            </div>
-
-            <p class="movie-synopsis" style="margin-top:16px;">
-                Em uma jornada épica, um herói se lança ao desconhecido em busca de glória e redenção. O filme conta a história de
-                <strong th:text="${movie.title}">um filme</strong>, uma aventura que mistura emoção, suspense e momentos de
-                pura diversão. Descubra por que este título continua marcando o público de tempos em tempos.
-            </p>
         </div>
     </section>
 
-    <section class="community-section" id="atividades" aria-labelledby="reviews-title">
+    <section class="community-section detail-reviews" id="avaliacoes" aria-labelledby="reviews-title">
         <div class="shell">
             <div class="section-heading">
                 <div>
