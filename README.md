@@ -1,51 +1,62 @@
 # CineCookie
 
-Equipe -
-    Luka de Souza Lima
-    Everton Fontes Alencar
+Clone acadêmico do Letterboxd para descobrir filmes, consultar detalhes e
+simular o cadastro e login de usuários.
 
-Clone acadêmico do Letterboxd com identidade visual baseada em cookies.
+## Integrantes
 
-## Estrutura
+- Luka de Souza Lima
+- Everton Fontes Alencar
 
-- `pom.xml`: configuração do projeto Maven.
-- `src/main/java`: aplicação Spring Boot e controllers MVC.
-- `src/main/resources/templates`: páginas renderizadas com Thymeleaf.
-- `src/main/resources/static`: CSS, JavaScript, fontes e imagens.
-- `src/test/java`: testes automatizados.
+## Tecnologias
 
-O Thymeleaf é renderizado pelo Spring, por isso o front-end e o back-end fazem
-parte do mesmo módulo Maven. Se futuramente existir um aplicativo móvel ou outro
-cliente independente, ele pode ser adicionado como um novo módulo no monorepo.
+- Java 17
+- Spring Boot e Spring Web MVC
+- Thymeleaf
+- HTML, CSS e JavaScript
+- Maven
 
-## Dados simulados
+## Funcionalidades
 
-Cadastro e login são processados pelo backend Spring Boot. As contas ficam em
-uma lista em memória e são apagadas quando a aplicação é reiniciada, dispensando
-banco de dados nesta etapa do trabalho.
+- Home e catálogo de filmes.
+- Busca e filtros por gênero.
+- Página de detalhes de cada filme.
+- Cadastro e login integrados ao backend.
+- Usuários armazenados em memória durante a execução.
 
-## Requisitos
+## Principais rotas
 
-- Java 17 ou superior.
-- Maven 3.9 ou superior.
+| Método | Rota | Função |
+| --- | --- | --- |
+| GET | `/` | Página inicial |
+| GET | `/filmes` | Catálogo de filmes |
+| GET | `/filmes/{id}` | Detalhes de um filme |
+| GET | `/cadastro` | Formulário de cadastro |
+| POST | `/cadastro` | Processa e armazena o cadastro |
+| GET | `/login` | Formulário de login |
+| POST | `/login` | Valida os dados de acesso |
 
-## Executar localmente
+## Como executar
 
-```bash
-mvn spring-boot:run
-```
-
-Acesse [http://localhost:8080](http://localhost:8080).
-
-Se o Maven não estiver instalado globalmente, o Maven Wrapper incluído no
-repositório continua disponível:
+É necessário ter o Java 17 ou superior instalado. Na raiz do projeto, execute:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-## Verificar o projeto
+No Windows, utilize:
+
+```powershell
+mvnw.cmd spring-boot:run
+```
+
+Depois, acesse [http://localhost:8080](http://localhost:8080).
+
+Para executar os testes:
 
 ```bash
-mvn clean verify
+./mvnw test
 ```
+
+Os usuários são mantidos somente em memória e apagados quando a aplicação é
+reiniciada. Banco de dados não é necessário nesta etapa do trabalho.
