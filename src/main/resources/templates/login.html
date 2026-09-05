@@ -38,11 +38,11 @@
             <h2 id="login-title">Entre na sua conta</h2>
             <p class="auth-intro">Continue de onde parou e descubra sua próxima história.</p>
 
-            <form class="auth-form" data-demo-form data-success="Página pronta! A autenticação será conectada na etapa do backend.">
+            <form class="auth-form" th:action="@{/login}" method="post">
                 <label for="email">E-mail</label>
                 <div class="input-wrap">
                     <span aria-hidden="true">@</span>
-                    <input id="email" name="email" type="email" placeholder="voce@email.com" autocomplete="email" required>
+                    <input id="email" name="email" type="email" placeholder="voce@email.com" autocomplete="email" th:value="${email}" required>
                 </div>
 
                 <div class="label-row">
@@ -51,7 +51,7 @@
                 </div>
                 <div class="input-wrap">
                     <span aria-hidden="true">●</span>
-                    <input id="password" name="password" type="password" placeholder="Digite sua senha" autocomplete="current-password" minlength="6" required>
+                    <input id="password" name="password" type="password" placeholder="Digite sua senha" autocomplete="current-password" minlength="8" required>
                     <button class="password-toggle" type="button" data-password-toggle="password" aria-label="Mostrar senha">Mostrar</button>
                 </div>
 
@@ -61,7 +61,8 @@
                 </label>
 
                 <button class="button button-primary button-submit" type="submit">Entrar <span aria-hidden="true">→</span></button>
-                <p class="form-status" role="status" hidden></p>
+                <p class="form-status" role="status" th:if="${successMessage}" th:text="${successMessage}">Login realizado.</p>
+                <p class="form-status form-status-error" role="alert" th:if="${errorMessage}" th:text="${errorMessage}">Não foi possível entrar.</p>
             </form>
 
             <p class="auth-switch">Ainda não tem uma conta? <a th:href="@{/cadastro}">Cadastre-se grátis</a></p>

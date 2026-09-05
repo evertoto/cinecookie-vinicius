@@ -1246,6 +1246,23 @@ img {
     text-align: center;
 }
 
+.form-status-error {
+    border-color: rgba(225, 112, 112, 0.34);
+    color: #ef9a9a;
+    background: rgba(225, 112, 112, 0.08);
+}
+
+.simulated-data-note {
+    margin: 16px 0 -8px;
+    color: var(--text-muted);
+    font-size: 11px;
+    text-align: center;
+}
+
+.simulated-data-note strong {
+    color: var(--primary);
+}
+
 .auth-switch {
     margin: 28px 0 0;
     padding-top: 24px;

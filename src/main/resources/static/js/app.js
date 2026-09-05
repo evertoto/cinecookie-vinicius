@@ -80,21 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', (event) => event.preventDefault());
     });
 
-    document.querySelectorAll('[data-demo-form]').forEach((form) => {
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
-            }
-            const status = form.querySelector('.form-status');
-            if (status) {
-                status.textContent = form.dataset.success;
-                status.hidden = false;
-            }
-        });
-    });
-
     document.querySelectorAll('[data-current-year]').forEach((node) => {
         node.textContent = String(new Date().getFullYear());
     });
