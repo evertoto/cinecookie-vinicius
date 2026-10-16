@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -20,7 +21,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    @Transactional
     public RegistrationResult register(RegistrationForm form) {
         String normalizedEmail = normalize(form.getEmail());
         String normalizedUsername = normalize(form.getUsername());
@@ -39,8 +39,12 @@ public class UserService {
                 normalizedEmail,
                 hash(form.getPassword()),
                 Instant.now());
-        userRepository.save(user);
-        return RegistrationResult.SUCCESS;
+        try {
+            userRepository.saveAndFlush(user);
+            return RegistrationResult.SUCCESS;
+        } catch (DataIntegrityViolationException exception) {
+            return RegistrationResult.CONFLICT;
+        }
     }
 
     @Transactional(readOnly = true)

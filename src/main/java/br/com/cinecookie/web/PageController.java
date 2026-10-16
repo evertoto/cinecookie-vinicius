@@ -116,6 +116,12 @@ public class PageController {
             bindingResult.reject("registration.usernameAlreadyExists", "Este nome de usuário já está em uso.");
             return "cadastro";
         }
+        if (result == RegistrationResult.CONFLICT) {
+            bindingResult.reject(
+                    "registration.conflict",
+                    "Não foi possível criar a conta porque o e-mail ou usuário acabou de ser cadastrado.");
+            return "cadastro";
+        }
 
         redirectAttributes.addFlashAttribute(
                 "successMessage",
