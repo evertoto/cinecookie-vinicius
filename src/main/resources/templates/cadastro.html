@@ -41,39 +41,44 @@
             <h2 id="signup-title">Crie sua conta</h2>
             <p class="auth-intro">É grátis, rápido e o começo de uma ótima história.</p>
 
-            <form class="auth-form" th:action="@{/cadastro}" method="post">
+            <form class="auth-form" th:action="@{/cadastro}" th:object="${registrationForm}" method="post" novalidate>
                 <div class="field-grid">
                     <div>
                         <label for="name">Nome</label>
-                        <div class="input-wrap"><span aria-hidden="true">○</span><input id="name" name="name" type="text" placeholder="Seu nome" autocomplete="name" minlength="2" th:value="${name}" required></div>
+                        <div class="input-wrap" th:classappend="${#fields.hasErrors('name')} ? ' input-wrap-error'"><span aria-hidden="true">○</span><input id="name" type="text" placeholder="Seu nome" autocomplete="name" th:field="*{name}"></div>
+                        <p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Nome inválido.</p>
                     </div>
                     <div>
                         <label for="username">Usuário</label>
-                        <div class="input-wrap"><span aria-hidden="true">@</span><input id="username" name="username" type="text" placeholder="seuusuario" autocomplete="username" pattern="[A-Za-z0-9._-]{3,20}" th:value="${username}" required></div>
+                        <div class="input-wrap" th:classappend="${#fields.hasErrors('username')} ? ' input-wrap-error'"><span aria-hidden="true">@</span><input id="username" type="text" placeholder="seuusuario" autocomplete="username" th:field="*{username}"></div>
+                        <p class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Usuário inválido.</p>
                     </div>
                 </div>
 
                 <label for="signup-email">E-mail</label>
-                <div class="input-wrap"><span aria-hidden="true">✉</span><input id="signup-email" name="email" type="email" placeholder="voce@email.com" autocomplete="email" th:value="${email}" required></div>
+                <div class="input-wrap" th:classappend="${#fields.hasErrors('email')} ? ' input-wrap-error'"><span aria-hidden="true">✉</span><input id="signup-email" type="email" placeholder="voce@email.com" autocomplete="email" th:field="*{email}"></div>
+                <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">E-mail inválido.</p>
 
                 <label for="signup-password">Senha</label>
-                <div class="input-wrap">
+                <div class="input-wrap" th:classappend="${#fields.hasErrors('password')} ? ' input-wrap-error'">
                     <span aria-hidden="true">●</span>
-                    <input id="signup-password" name="password" type="password" placeholder="Mínimo de 8 caracteres" autocomplete="new-password" minlength="8" required>
+                    <input id="signup-password" type="password" placeholder="Mínimo de 8 caracteres" autocomplete="new-password" th:field="*{password}">
                     <button class="password-toggle" type="button" data-password-toggle="signup-password" aria-label="Mostrar senha">Mostrar</button>
                 </div>
+                <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Senha inválida.</p>
                 <div class="password-strength" aria-hidden="true"><span></span><span></span><span></span></div>
 
                 <label class="check-row terms-row">
-                    <input type="checkbox" name="terms" required>
+                    <input type="checkbox" th:field="*{terms}">
                     <span>Li e concordo com os <a href="#" data-placeholder-link>Termos de Uso</a> e a <a href="#" data-placeholder-link>Política de Privacidade</a>.</span>
                 </label>
+                <p class="field-error terms-error" th:if="${#fields.hasErrors('terms')}" th:errors="*{terms}">Aceite os termos.</p>
 
                 <button class="button button-primary button-submit" type="submit">Criar minha conta <span aria-hidden="true">→</span></button>
-                <p class="form-status form-status-error" role="alert" th:if="${errorMessage}" th:text="${errorMessage}">Não foi possível criar a conta.</p>
+                <p class="form-status form-status-error" role="alert" th:each="error : ${#fields.globalErrors()}" th:text="${error}">Não foi possível criar a conta.</p>
             </form>
 
-            <p class="simulated-data-note"><strong th:text="${registeredUserCount}">0</strong> contas simuladas nesta execução.</p>
+            <p class="simulated-data-note"><strong th:text="${registeredUserCount}">0</strong> contas cadastradas no banco.</p>
             <p class="auth-switch">Já faz parte da comunidade? <a th:href="@{/login}">Entrar</a></p>
         </div>
     </section>

@@ -38,22 +38,24 @@
             <h2 id="login-title">Entre na sua conta</h2>
             <p class="auth-intro">Continue de onde parou e descubra sua próxima história.</p>
 
-            <form class="auth-form" th:action="@{/login}" method="post">
+            <form class="auth-form" th:action="@{/login}" th:object="${loginForm}" method="post" novalidate>
                 <label for="email">E-mail</label>
-                <div class="input-wrap">
+                <div class="input-wrap" th:classappend="${#fields.hasErrors('email')} ? ' input-wrap-error'">
                     <span aria-hidden="true">@</span>
-                    <input id="email" name="email" type="email" placeholder="voce@email.com" autocomplete="email" th:value="${email}" required>
+                    <input id="email" type="email" placeholder="voce@email.com" autocomplete="email" th:field="*{email}">
                 </div>
+                <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">E-mail inválido.</p>
 
                 <div class="label-row">
                     <label for="password">Senha</label>
                     <a href="#" data-placeholder-link>Esqueci minha senha</a>
                 </div>
-                <div class="input-wrap">
+                <div class="input-wrap" th:classappend="${#fields.hasErrors('password')} ? ' input-wrap-error'">
                     <span aria-hidden="true">●</span>
-                    <input id="password" name="password" type="password" placeholder="Digite sua senha" autocomplete="current-password" minlength="8" required>
+                    <input id="password" type="password" placeholder="Digite sua senha" autocomplete="current-password" th:field="*{password}">
                     <button class="password-toggle" type="button" data-password-toggle="password" aria-label="Mostrar senha">Mostrar</button>
                 </div>
+                <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Senha inválida.</p>
 
                 <label class="check-row">
                     <input type="checkbox" name="remember">
