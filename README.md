@@ -40,8 +40,36 @@ cadastrar usuários com persistência em banco de dados.
 
 ## Como executar
 
-É necessário ter Java 17 ou superior e Docker instalados. Na raiz do projeto,
-inicie o PostgreSQL:
+Para executar tudo em containers, instale e inicie o Docker Desktop (ou Docker
+Engine com Compose no Linux). Não é necessário instalar Java, Maven ou PostgreSQL
+separadamente. Na raiz do projeto, execute:
+
+```bash
+docker compose up --build
+```
+
+Quando a aplicação terminar de iniciar, acesse
+[http://localhost:8080](http://localhost:8080). O comando funciona também no
+PowerShell do Windows. Na primeira execução, é necessária conexão com a internet
+para baixar as imagens e dependências.
+
+O build compila o projeto e executa os testes. A aplicação aguarda o PostgreSQL
+ficar saudável antes de iniciar. Os usuários ficam preservados em um volume,
+inclusive após encerrar os containers.
+
+Se as portas padrão estiverem ocupadas, crie um arquivo `.env` na raiz com:
+
+```dotenv
+APP_PORT=8081
+DB_PORT=5433
+```
+
+Nesse exemplo, abra [http://localhost:8081](http://localhost:8081).
+
+### Desenvolvimento com Java local
+
+Para executar a aplicação fora do container, é necessário Java 17 ou superior.
+Inicie somente o banco:
 
 ```bash
 docker compose up -d database
@@ -82,7 +110,7 @@ Para executar os testes:
 
 Os testes utilizam um banco H2 isolado e não alteram os dados do PostgreSQL.
 
-Para encerrar o banco local:
+Para encerrar a aplicação e o banco, preservando os dados:
 
 ```bash
 docker compose down

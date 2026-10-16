@@ -1,4 +1,21 @@
 services:
+  app:
+    build: .
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      DB_URL: jdbc:postgresql://database:5432/cinecookie
+      DB_USERNAME: cinecookie
+      DB_PASSWORD: cinecookie
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/login"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
   database:
     image: postgres:17-alpine
     environment:
@@ -6,7 +23,7 @@ services:
       POSTGRES_USER: cinecookie
       POSTGRES_PASSWORD: cinecookie
     ports:
-      - "5432:5432"
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U cinecookie -d cinecookie"]
       interval: 5s

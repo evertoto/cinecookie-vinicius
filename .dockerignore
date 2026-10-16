@@ -1,0 +1,12 @@
+.git
+.idea
+.vscode
+.superpowers
+target
+docs
+AGENTS.md
+CONTEXT.md
+.DS_Store
+*.log
+.env
+.env.*
