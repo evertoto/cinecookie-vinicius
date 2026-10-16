@@ -23,9 +23,24 @@
                 <a th:href="@{/filmes}">Filmes</a>
                 <a th:href="@{/#atividade}">Comunidade</a>
             </div>
-            <div class="nav-actions">
+            <div class="nav-actions" th:if="${currentUser == null}">
                 <a class="button button-ghost" th:href="@{/login}">Entrar</a>
                 <a class="button button-primary button-small" th:href="@{/cadastro}">Criar conta</a>
+            </div>
+            <div class="nav-actions account-actions" th:if="${currentUser != null}">
+                <div class="account-identity">
+                    <img class="account-avatar" th:src="@{/images/avatar-default.svg}" alt="Avatar padrão do usuário" width="40" height="40">
+                    <span class="account-copy">
+                        <strong th:text="${currentUser.name}">Nome do usuário</strong>
+                        <small th:text="|@${currentUser.username}|">@usuario</small>
+                    </span>
+                </div>
+                <form class="logout-form" th:action="@{/logout}" method="post">
+                    <button class="button button-ghost logout-button" type="submit" aria-label="Sair da sua conta">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H5v14h4M14 8l4 4-4 4M9 12h12"/></svg>
+                        Sair
+                    </button>
+                </form>
             </div>
         </nav>
     </div>

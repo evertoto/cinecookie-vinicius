@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.mock.web.MockHttpSession;
 
 import br.com.cinecookie.user.UserRepository;
 
@@ -20,6 +21,8 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
@@ -59,6 +62,17 @@ class CineCookieApplicationTests {
 	}
 
 	@Test
+	void servesVersionedStylesheetToAvoidStaleBrowserCache() throws Exception {
+		String html = mockMvc.perform(get("/")).andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+		java.util.regex.Matcher stylesheet = java.util.regex.Pattern
+				.compile("/css/styles-[a-f0-9]+\\.css").matcher(html);
+		assertThat(stylesheet.find()).isTrue();
+		mockMvc.perform(get(stylesheet.group())).andExpect(status().isOk())
+				.andExpect(content().string(containsString(".account-identity")));
+	}
+
+	@Test
 	void registersAndAuthenticatesPersistedUser() throws Exception {
 		String email = "teste-integracao@cinecookie.com";
 
@@ -77,10 +91,66 @@ class CineCookieApplicationTests {
 		mockMvc.perform(post("/login")
 					.param("email", email)
 					.param("password", "cinema123"))
-				.andExpect(status().isOk())
-				.andExpect(view().name("login"))
-				.andExpect(model().attribute("successMessage", containsString("Login realizado")))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("/"))
 				.andExpect(request().sessionAttribute("userId", notNullValue()));
+	}
+
+	@Test
+	void showsLoggedInUserAcrossPublicPagesAndRedirectsLogin() throws Exception {
+		MockHttpSession session = authenticatedSession();
+		for (String route : new String[]{"/", "/filmes", "/filmes/a-odisseia"}) {
+			mockMvc.perform(get(route).session(session))
+					.andExpect(status().isOk())
+					.andExpect(model().attribute("currentUser",
+							new br.com.cinecookie.user.UserService.CurrentUser("Usuário Teste", "usuario.teste")))
+					.andExpect(content().string(containsString("avatar-default.svg")))
+					.andExpect(content().string(containsString("Sair da sua conta")))
+					.andExpect(content().string(not(containsString(">Entrar</a>"))))
+					.andExpect(content().string(not(containsString("passwordHash"))));
+		}
+		mockMvc.perform(get("/login").session(session)).andExpect(redirectedUrl("/"));
+	}
+
+	@Test
+	void logoutInvalidatesSessionAndRestoresGuestNavigation() throws Exception {
+		MockHttpSession session = authenticatedSession();
+		mockMvc.perform(post("/logout").session(session))
+				.andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/"));
+		assertThat(session.isInvalid()).isTrue();
+		mockMvc.perform(get("/"))
+				.andExpect(content().string(containsString(">Entrar</a>")))
+				.andExpect(content().string(not(containsString("Sair da sua conta"))));
+		mockMvc.perform(post("/filmes/a-odisseia/avaliacoes").param("rating", "5.0"))
+				.andExpect(redirectedUrl("/login"));
+	}
+
+	@Test
+	void clearsSessionForDeletedAccount() throws Exception {
+		MockHttpSession session = authenticatedSession();
+		userRepository.deleteAll();
+		mockMvc.perform(get("/").session(session)).andExpect(status().isOk())
+				.andExpect(content().string(containsString(">Entrar</a>")));
+		assertThat(session.isInvalid()).isTrue();
+	}
+
+	@Test
+	void rotatesSessionIdentifierWhenLoggingIn() throws Exception {
+		postRegistration("Usuário Teste", "usuario.teste", "session@cinecookie.com", "cinema123");
+		MockHttpSession session = new MockHttpSession();
+		String previousId = session.getId();
+		mockMvc.perform(post("/login").session(session)
+				.param("email", "session@cinecookie.com").param("password", "cinema123"))
+				.andExpect(redirectedUrl("/"));
+		assertThat(session.getId()).isNotEqualTo(previousId);
+	}
+
+	private MockHttpSession authenticatedSession() throws Exception {
+		postRegistration("Usuário Teste", "usuario.teste", "header@cinecookie.com", "cinema123");
+		return (MockHttpSession) mockMvc.perform(post("/login")
+				.param("email", "header@cinecookie.com").param("password", "cinema123"))
+				.andExpect(redirectedUrl("/"))
+				.andReturn().getRequest().getSession(false);
 	}
 
 	@Test

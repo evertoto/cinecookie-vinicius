@@ -3,6 +3,7 @@ package br.com.cinecookie.web;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -50,6 +51,9 @@ public class PageController {
 
     @GetMapping("/login")
     public String login(Model model) {
+        if (model.getAttribute("currentUser") != null) {
+            return "redirect:/";
+        }
         prepareLoginPage(model);
         if (!model.containsAttribute("loginForm")) {
             model.addAttribute("loginForm", new LoginForm());
@@ -62,7 +66,8 @@ public class PageController {
             @Valid @ModelAttribute("loginForm") LoginForm form,
             BindingResult bindingResult,
             Model model,
-            HttpSession session) {
+            HttpSession session,
+            HttpServletRequest request) {
         prepareLoginPage(model);
 
         if (bindingResult.hasErrors()) {
@@ -75,10 +80,18 @@ public class PageController {
             return "login";
         }
 
+        request.changeSessionId();
         session.setAttribute("userId", user.getId());
-        form.setPassword("");
-        model.addAttribute("successMessage", "Login realizado! Bem-vindo, " + user.getName() + ".");
-        return "login";
+        return "redirect:/";
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/";
     }
 
     @GetMapping("/cadastro")

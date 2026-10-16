@@ -63,6 +63,14 @@ public class UserService {
         return userRepository.count();
     }
 
+    @Transactional(readOnly = true)
+    public Optional<CurrentUser> findCurrentUser(Long id) {
+        return userRepository.findById(id)
+                .map(user -> new CurrentUser(user.getName(), user.getUsername()));
+    }
+
+    public record CurrentUser(String name, String username) {}
+
     private String normalize(String value) {
         return value.trim().toLowerCase(Locale.ROOT);
     }

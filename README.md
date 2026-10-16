@@ -25,6 +25,7 @@ cadastrar usuários com persistência em banco de dados.
 - Página de detalhes de cada filme.
 - Cadastro persistente com validações no backend.
 - Login validado pelo banco e usuário autenticado mantido na sessão.
+- Login redireciona para a home; o cabeçalho exibe nome, usuário, avatar padrão e botão de sair.
 - Avaliações com nota de 0,5 a 5 e comentário opcional de até 1000 caracteres.
 - Uma avaliação por usuário e filme; novos envios atualizam a própria avaliação.
 - Nota média calculada pelas avaliações e atividade recente na home.
@@ -51,6 +52,7 @@ avaliação, a nota passa a ser a média dos usuários.
 | POST | `/cadastro` | Processa e armazena o cadastro |
 | GET | `/login` | Formulário de login |
 | POST | `/login` | Valida os dados de acesso |
+| POST | `/logout` | Encerra a sessão e retorna à home |
 | POST | `/filmes/{id}/avaliacoes` | Cria ou atualiza a avaliação do usuário da sessão |
 
 ## Como executar
