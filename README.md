@@ -20,11 +20,25 @@ cadastrar usuários com persistência em banco de dados.
 
 ## Funcionalidades
 
-- Home e catálogo de filmes.
+- Home e catálogo de filmes persistidos no PostgreSQL.
 - Busca e filtros por gênero.
 - Página de detalhes de cada filme.
 - Cadastro persistente com validações no backend.
 - Login validado pelo banco e usuário autenticado mantido na sessão.
+- Avaliações com nota de 0,5 a 5 e comentário opcional de até 1000 caracteres.
+- Uma avaliação por usuário e filme; novos envios atualizam a própria avaliação.
+- Nota média calculada pelas avaliações e atividade recente na home.
+
+## Relacionamentos JPA
+
+`Movie` e `Genre` usam `@ManyToMany` com a tabela `movie_genres`.
+`Review` possui dois relacionamentos `@ManyToOne`: um com `User` e outro com
+`Movie`. As chaves estrangeiras e a unicidade de usuário/filme são garantidas
+pelas migrations. Não há cascade de remoção entre essas entidades.
+
+O catálogo inicial e seus gêneros são inseridos pelo Flyway uma única vez.
+Enquanto um filme não tem avaliações, sua nota inicial é exibida; após a primeira
+avaliação, a nota passa a ser a média dos usuários.
 
 ## Principais rotas
 
@@ -37,6 +51,7 @@ cadastrar usuários com persistência em banco de dados.
 | POST | `/cadastro` | Processa e armazena o cadastro |
 | GET | `/login` | Formulário de login |
 | POST | `/login` | Valida os dados de acesso |
+| POST | `/filmes/{id}/avaliacoes` | Cria ou atualiza a avaliação do usuário da sessão |
 
 ## Como executar
 

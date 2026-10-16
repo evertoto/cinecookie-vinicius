@@ -48,7 +48,7 @@ The current monolithic `PageController` will be separated only where necessary i
 - `id: Long`, generated with `IDENTITY`.
 - `slug`, required and unique, used by `/filmes/{slug}`.
 - `title`, duration, age rating, poster path and initial community score.
-- Initial catalog records are inserted by a repeatable, deterministic Flyway seed migration.
+- Initial catalog records are inserted once by a versioned Flyway seed migration.
 
 ### Genre
 
@@ -68,10 +68,9 @@ The current monolithic `PageController` will be separated only where necessary i
 Migrations live in `src/main/resources/db/migration` and are immutable after application:
 
 1. `V1__create_users.sql`
-2. `V2__create_movies.sql`
-3. `V3__seed_movies.sql`
-4. `V4__create_genres_and_movie_genres.sql`
-5. `V5__create_reviews.sql`
+2. `V2__create_movies_and_genres.sql`
+3. `V3__seed_catalog.sql`
+4. `V4__create_reviews.sql`
 
 Column lengths, nullability and unique constraints match the JPA and Bean Validation rules. Future schema changes require a new migration rather than editing an applied file.
 

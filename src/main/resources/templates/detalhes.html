@@ -73,63 +73,31 @@
                     <h2 id="reviews-title">O que a comunidade está dizendo</h2>
                 </div>
             </div>
+            <p class="form-status" role="status" th:if="${reviewMessage}" th:text="${reviewMessage}"></p>
+            <form class="review-editor auth-form" th:if="${canReview}" th:object="${reviewForm}"
+                  th:action="@{/filmes/{slug}/avaliacoes(slug=${movie.id})}" method="post">
+                <h3>Sua avaliação</h3>
+                <p>Você pode atualizar sua nota e seu comentário quando quiser.</p>
+                <label for="rating">Nota de 0,5 a 5</label>
+                <select id="rating" th:field="*{rating}" aria-describedby="rating-errors">
+                    <option value="">Escolha uma nota</option>
+                    <option th:each="step : ${#numbers.sequence(1, 10)}" th:value="${step / 2.0}" th:text="|${step / 2.0} ★|"></option>
+                </select>
+                <p id="rating-errors" class="field-error" th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}"></p>
+                <p class="field-error" th:if="${#fields.hasErrors('ratingStepValid')}" th:errors="*{ratingStepValid}"></p>
+                <label for="comment">Comentário (opcional)</label>
+                <textarea id="comment" rows="4" maxlength="1000" th:field="*{comment}" aria-describedby="comment-errors" placeholder="O que você achou do filme?"></textarea>
+                <p id="comment-errors" class="field-error" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}"></p>
+                <p class="form-status form-status-error" role="alert" th:each="error : ${#fields.globalErrors()}" th:text="${error}"></p>
+                <button class="button button-primary" type="submit">Salvar avaliação</button>
+            </form>
+            <p class="review-login-prompt" th:unless="${canReview}"><a th:href="@{/login}">Entre na sua conta</a> para avaliar este filme.</p>
+            <p th:if="${#lists.isEmpty(reviews)}">Ainda não há avaliações. Seja o primeiro a compartilhar sua opinião.</p>
             <div class="review-grid">
-                <article class="review-card">
-                    <header>
-                        <span class="avatar avatar-copper">AC</span>
-                        <span>
-                            <strong>Ana Clara</strong>
-                            <small>assistiu <span th:text="${movie.title}">este filme</span></small>
-                        </span>
-                        <time datetime="2026-08-20">ontem</time>
-                    </header>
-                    <p>
-                        "Cinema do tamanho que a tela grande merece.
-                        <span th:text="${movie.title}">Este filme</span>
-                        tem tudo: ritmo, personagens e uma história que prende até nos momentos mais quietos."
-                    </p>
-                    <footer>
-                        <span class="stars" aria-label="5 de 5 estrelas">★★★★★</span>
-                        <span>♡ 28</span>
-                    </footer>
-                </article>
-                <article class="review-card">
-                    <header>
-                        <span class="avatar avatar-blue">RM</span>
-                        <span>
-                            <strong>Rafael Melo</strong>
-                            <small>assistiu <span th:text="${movie.title}">este filme</span></small>
-                        </span>
-                        <time datetime="2026-08-19">2 dias</time>
-                    </header>
-                    <p>
-                        "Divertido, original e cheio de personalidade.
-                        <span th:text="${movie.title}">O filme</span>
-                        é aquele tipo que faz todo mundo conversar na saída do cinema."
-                    </p>
-                    <footer>
-                        <span class="stars" aria-label="4 de 5 estrelas">★★★★<i>★</i></span>
-                        <span>♡ 19</span>
-                    </footer>
-                </article>
-                <article class="review-card">
-                    <header>
-                        <span class="avatar avatar-green">JS</span>
-                        <span>
-                            <strong>João Silva</strong>
-                            <small>assistiu <span th:text="${movie.title}">este filme</span></small>
-                        </span>
-                        <time datetime="2026-08-17">2 dias</time>
-                    </header>
-                    <p>
-                        "A ficha técnica soma ponto e o elenco entrega em cheio.
-                        <span th:text="${movie.title}">O longa</span>
-                        vale cada minuto da sessão."
-                    </p>
-                    <footer>
-                        <span class="stars" aria-label="5 de 5 estrelas">★★★★★</span>
-                        <span>♡ 34</span>
-                    </footer>
+                <article class="review-card" th:each="review : ${reviews}">
+                    <header><span class="avatar avatar-copper" th:text="${#strings.substring(review.author, 0, 1)}">U</span><strong th:text="${review.author}">Usuário</strong></header>
+                    <p th:if="${!#strings.isEmpty(review.comment)}" th:text="${review.comment}">Comentário</p>
+                    <footer><span class="stars" th:text="|★ ${review.rating} / 5|">Nota</span></footer>
                 </article>
             </div>
         </div>
