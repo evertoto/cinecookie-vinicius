@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Algo deu errado — CineCookie</title>
+    <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: siteHeader(null)}"></div>
+
+<main>
+    <section class="shell" aria-labelledby="error-title">
+        <div class="empty-state">
+            <span aria-hidden="true">🎬</span>
+            <h1 id="error-title" th:text="${status == 404} ? 'Página não encontrada' : 'Algo deu errado'">Algo deu errado</h1>
+            <p th:if="${status == 404}">Não encontramos o que você procurava. Que tal voltar ao catálogo?</p>
+            <p th:unless="${status == 404}">Tivemos um problema inesperado. Tente novamente em instantes.</p>
+            <p style="margin-top: 24px"><a class="button button-primary" th:href="@{/}">Voltar para o início</a></p>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+</body>
+</html>
