@@ -19,9 +19,9 @@
 
         <nav class="main-nav" id="main-navigation" aria-label="Navegação principal">
             <div class="nav-links">
-                <a th:href="@{/}" th:classappend="${activePage == 'home'} ? ' is-active'">Início</a>
-                <a th:href="@{/filmes}">Filmes</a>
-                <a th:href="@{/#atividade}">Comunidade</a>
+                <a th:href="@{/}" data-nav="home" th:classappend="${activePage == 'home'} ? ' is-active'">Início</a>
+                <a th:href="@{/filmes}" data-nav="movies" th:classappend="${activePage == 'filmes'} ? ' is-active'">Filmes</a>
+                <a th:href="@{/#atividade}" data-nav="community">Comunidade</a>
             </div>
             <div class="nav-actions" th:if="${currentUser == null}">
                 <a class="button button-ghost" th:href="@{/login}">Entrar</a>

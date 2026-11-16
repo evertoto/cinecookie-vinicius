@@ -80,6 +80,45 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', (event) => event.preventDefault());
     });
 
+    // Na home, o item ativo do menu acompanha a seção que está na tela.
+    const navLinks = [...document.querySelectorAll('.nav-links a[data-nav]')];
+    const sections = [
+        { key: 'home', element: document.querySelector('.hero') },
+        { key: 'movies', element: document.querySelector('#filmes') },
+        { key: 'community', element: document.querySelector('#atividade') },
+    ];
+    const isHome = sections.every((section) => section.element) && navLinks.length > 0;
+
+    if (isHome) {
+        const updateActiveNav = () => {
+            const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+            let current = sections[0].key;
+            if (atBottom) {
+                current = sections[sections.length - 1].key;
+            } else {
+                const line = window.innerHeight * 0.35;
+                sections.forEach((section) => {
+                    if (section.element.getBoundingClientRect().top <= line) current = section.key;
+                });
+            }
+            navLinks.forEach((link) => link.classList.toggle('is-active', link.dataset.nav === current));
+        };
+
+        let ticking = false;
+        const requestUpdate = () => {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(() => {
+                updateActiveNav();
+                ticking = false;
+            });
+        };
+
+        window.addEventListener('scroll', requestUpdate, { passive: true });
+        window.addEventListener('resize', requestUpdate);
+        updateActiveNav();
+    }
+
     document.querySelectorAll('[data-current-year]').forEach((node) => {
         node.textContent = String(new Date().getFullYear());
     });
