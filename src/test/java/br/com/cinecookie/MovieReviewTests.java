@@ -88,6 +88,13 @@ class MovieReviewTests {
     }
 
     @Test
+    void showsDashInsteadOfSeededScoreUntilFirstReview() {
+        assertThat(catalog.find("homem-aranha").orElseThrow().score()).isEqualTo("-");
+        reviewService.save(user("rater").getId(), "homem-aranha", form("3.5", ""));
+        assertThat(catalog.find("homem-aranha").orElseThrow().score()).isEqualTo("3.5");
+    }
+
+    @Test
     void rejectsAnonymousReviews() throws Exception {
         mvc.perform(post("/filmes/a-odisseia/avaliacoes").param("rating", "4.5"))
                 .andExpect(redirectedUrl("/login"));

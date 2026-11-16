@@ -41,7 +41,7 @@ cadastrar usuários com persistência em banco de dados.
 pelas migrations. Não há cascade de remoção entre essas entidades.
 
 O catálogo inicial e seus gêneros são inseridos pelo Flyway uma única vez.
-Enquanto um filme não tem avaliações, sua nota inicial é exibida; após a primeira
+Enquanto um filme não tem avaliações, sua nota aparece como `-`; após a primeira
 avaliação, a nota passa a ser a média dos usuários.
 
 ## Principais rotas

@@ -13,6 +13,9 @@ import br.com.cinecookie.review.ReviewRepository;
 @Service
 @Transactional(readOnly = true)
 public class MovieService {
+    /** Exibido enquanto o filme ainda não tem nenhuma avaliação. */
+    public static final String NO_SCORE = "-";
+
     private final MovieRepository movies;
     private final ReviewRepository reviews;
 
@@ -36,11 +39,12 @@ public class MovieService {
     }
 
     private MovieView view(Movie movie, Map<Long, Double> scores) {
-        BigDecimal score = scores.containsKey(movie.getId())
-                ? BigDecimal.valueOf(scores.get(movie.getId())) : movie.getInitialScore();
+        String score = scores.containsKey(movie.getId())
+                ? BigDecimal.valueOf(scores.get(movie.getId())).setScale(1, RoundingMode.HALF_UP).toPlainString()
+                : NO_SCORE;
         return new MovieView(movie.getSlug(), movie.getTitle(),
                 movie.getGenres().stream().map(Genre::getName).collect(Collectors.joining(" • ")),
-                movie.getDuration(), movie.getAgeRating(), score.setScale(1, RoundingMode.HALF_UP).toPlainString(),
+                movie.getDuration(), movie.getAgeRating(), score,
                 movie.getPoster(), movie.getCategory());
     }
 
