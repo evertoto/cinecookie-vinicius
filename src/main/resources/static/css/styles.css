@@ -1249,6 +1249,7 @@ img {
     gap: 11px;
     margin-bottom: 19px;
     padding: 0 15px;
+    cursor: text;
     border: 1px solid var(--divider);
     border-radius: var(--radius-md);
     color: var(--text-muted);

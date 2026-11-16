@@ -65,6 +65,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Clicar em qualquer parte do campo (ícone, bordas, espaço vazio) foca o input.
+    document.querySelectorAll('.input-wrap').forEach((wrap) => {
+        const field = wrap.querySelector('input');
+        if (!field) return;
+        wrap.addEventListener('mousedown', (event) => {
+            if (event.target === field || event.target.closest('button, a')) return;
+            event.preventDefault();
+            field.focus();
+        });
+    });
+
     document.querySelectorAll('[data-password-toggle]').forEach((button) => {
         button.addEventListener('click', () => {
             const input = document.getElementById(button.dataset.passwordToggle);
