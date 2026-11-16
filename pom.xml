@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.cinecookie</groupId>
 	<artifactId>cinecookie-web</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>CineCookie</name>
 	<description/>
 	<url/>
@@ -93,6 +93,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>app</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -1,36 +1,18 @@
+# Executa a aplicação em container. O banco é o Neon (cloud), não um container.
+# Uso: docker compose --env-file .env.dev up --build
 services:
   app:
     build: .
     ports:
       - "${APP_PORT:-8080}:8080"
     environment:
-      DB_URL: jdbc:postgresql://database:5432/cinecookie
-      DB_USERNAME: cinecookie
-      DB_PASSWORD: cinecookie
-    depends_on:
-      database:
-        condition: service_healthy
+      DB_URL: ${DB_URL:?defina DB_URL no arquivo .env.dev}
+      DB_USER: ${DB_USER:?defina DB_USER no arquivo .env.dev}
+      DB_PASSWORD: ${DB_PASSWORD:?defina DB_PASSWORD no arquivo .env.dev}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
     healthcheck:
-      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/login"]
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 30s
-  database:
-    image: postgres:17-alpine
-    environment:
-      POSTGRES_DB: cinecookie
-      POSTGRES_USER: cinecookie
-      POSTGRES_PASSWORD: cinecookie
-    ports:
-      - "127.0.0.1:${DB_PORT:-5432}:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U cinecookie -d cinecookie"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    volumes:
-      - cinecookie_postgres_data:/var/lib/postgresql/data
-
-volumes:
-  cinecookie_postgres_data:
+      start_period: 40s
