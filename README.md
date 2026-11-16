@@ -13,7 +13,10 @@ cadastrar usuários com persistência em banco de dados.
 - Java 17
 - Spring Boot e Spring Web MVC
 - Spring Data JPA e Bean Validation
-- Flyway e PostgreSQL
+- Flyway e PostgreSQL (Neon)
+- Spring Boot Actuator (health check)
+- Docker e Docker Compose
+- Render (deploy)
 - Thymeleaf
 - HTML, CSS e JavaScript
 - Maven
@@ -55,83 +58,151 @@ avaliação, a nota passa a ser a média dos usuários.
 | POST | `/logout` | Encerra a sessão e retorna à home |
 | POST | `/filmes/{id}/avaliacoes` | Cria ou atualiza a avaliação do usuário da sessão |
 
+## Variáveis de ambiente
+
+A aplicação não guarda segredos no código: o `application.properties` apenas
+lê valores do ambiente.
+
+| Variável | Obrigatória | Descrição |
+| --- | --- | --- |
+| `DB_URL` | Sim | URL JDBC do PostgreSQL, ex.: `jdbc:postgresql://HOST/BANCO?sslmode=require` |
+| `DB_USER` | Sim | Usuário do banco |
+| `DB_PASSWORD` | Sim | Senha do banco |
+| `SPRING_PROFILES_ACTIVE` | Não | `dev` (logs `DEBUG`, cache de templates desligado) ou `prod` |
+| `PORT` | Não | Porta da aplicação; o Render define sozinho. Padrão: `8080` |
+| `APP_PORT` | Não | Porta publicada no computador pelo Compose. Padrão: `8080` |
+
+O arquivo `.env.example` mostra o formato. Os arquivos `.env`, `.env.dev` e
+`.env.prod` com credenciais reais **nunca** vão para o Git (estão no `.gitignore`).
+
 ## Como executar
 
-Para executar tudo em containers, instale e inicie o Docker Desktop (ou Docker
-Engine com Compose no Linux). Não é necessário instalar Java, Maven ou PostgreSQL
-separadamente. Na raiz do projeto, execute:
+### Com Docker Compose (banco no Neon)
+
+Pré-requisito: Docker Desktop (ou Docker Engine com Compose) e um banco
+PostgreSQL criado no [Neon](https://neon.tech). Não é necessário instalar Java
+nem Maven.
+
+1. Copie o exemplo e preencha com os dados do seu banco:
+
+   ```bash
+   cp .env.example .env.dev
+   ```
+
+   No PowerShell: `Copy-Item .env.example .env.dev`. Use a URL no formato JDBC
+   (`jdbc:postgresql://HOST/BANCO?sslmode=require`) e prefira o host direto do
+   Neon, sem `-pooler`, porque o Flyway precisa de conexão direta.
+
+2. Suba a aplicação:
+
+   ```bash
+   docker compose --env-file .env.dev up --build
+   ```
+
+3. Acesse [http://localhost:8080](http://localhost:8080). O Flyway cria as
+   tabelas e o catálogo inicial no banco na primeira execução.
+
+Comandos úteis:
 
 ```bash
-docker compose up --build
+docker compose --env-file .env.dev up -d      # segundo plano
+docker compose ps                             # serviço, status e porta
+docker compose logs -f app                    # logs
+docker compose down                           # encerra (os dados ficam no Neon)
 ```
 
-Quando a aplicação terminar de iniciar, acesse
-[http://localhost:8080](http://localhost:8080). O comando funciona também no
-PowerShell do Windows. Na primeira execução, é necessária conexão com a internet
-para baixar as imagens e dependências.
+Se a porta 8080 estiver ocupada, defina `APP_PORT=8081` no `.env.dev`.
 
-O build compila o projeto e executa os testes. A aplicação aguarda o PostgreSQL
-ficar saudável antes de iniciar. Os usuários ficam preservados em um volume,
-inclusive após encerrar os containers.
+### PostgreSQL local (opcional)
 
-Se as portas padrão estiverem ocupadas, crie um arquivo `.env` na raiz com:
-
-```dotenv
-APP_PORT=8081
-DB_PORT=5433
-```
-
-Nesse exemplo, abra [http://localhost:8081](http://localhost:8081).
-
-### Desenvolvimento com Java local
-
-Para executar a aplicação fora do container, é necessário Java 17 ou superior.
-Inicie somente o banco:
+Para desenvolver sem usar o Neon, use o arquivo `compose.local-db.yaml`, que
+adiciona um PostgreSQL em container. No `.env.dev`, use
+`DB_URL=jdbc:postgresql://database:5432/cinecookie`, `DB_USER=cinecookie` e
+`DB_PASSWORD=cinecookie`, e execute:
 
 ```bash
-docker compose up -d database
+docker compose -f compose.yaml -f compose.local-db.yaml --env-file .env.dev up --build
 ```
 
-Em seguida, execute a aplicação:
+### Sem Docker (Java 17+)
+
+Defina as variáveis no terminal e execute com o Maven Wrapper:
 
 ```bash
+export DB_URL="jdbc:postgresql://HOST/BANCO?sslmode=require"
+export DB_USER="usuario"
+export DB_PASSWORD="senha"
+export SPRING_PROFILES_ACTIVE=dev
 ./mvnw spring-boot:run
 ```
 
-No Windows, utilize:
+No Windows (PowerShell), troque `export X=...` por `$env:X="..."` e use
+`mvnw.cmd spring-boot:run`.
 
-```powershell
-mvnw.cmd spring-boot:run
-```
-
-Depois, acesse [http://localhost:8080](http://localhost:8080).
-
-O Flyway executa automaticamente as migrations de
-`src/main/resources/db/migration`. O Hibernate utiliza
-`ddl-auto=validate`: ele confere se as entidades correspondem às tabelas, mas
-não modifica o banco.
-
-As configurações padrão podem ser substituídas por variáveis de ambiente:
+### Build e execução do JAR
 
 ```bash
-export DB_URL=jdbc:postgresql://localhost:5432/cinecookie
-export DB_USERNAME=cinecookie
-export DB_PASSWORD=cinecookie
+./mvnw clean package          # Windows: mvnw.cmd clean package
+java -jar target/app.jar
 ```
 
-Para executar os testes:
+O JAR (`target/app.jar`) roda sem IDE; as variáveis acima precisam estar definidas.
+
+### Testes
 
 ```bash
 ./mvnw test
 ```
 
-Os testes utilizam um banco H2 isolado e não alteram os dados do PostgreSQL.
+Os testes usam um banco H2 em memória (profile `test`) e não tocam no Neon.
+O GitHub Actions (`.github/workflows/ci.yml`) roda o build e os testes a cada
+push e pull request.
 
-Para encerrar a aplicação e o banco, preservando os dados:
+## Banco e migrations
 
-```bash
-docker compose down
-```
+O Flyway executa as migrations de `src/main/resources/db/migration` ao iniciar,
+inclusive em um banco vazio (V1 → V4). O Hibernate usa `ddl-auto=validate`:
+confere se as entidades correspondem às tabelas, mas não altera o banco.
+**Nunca edite uma migration já aplicada**; crie uma nova versão (V5, V6...).
+Os dados de V3 são o catálogo de filmes da aplicação; não há usuários fictícios.
 
-Use `docker compose down -v` somente quando quiser remover também todos os
-dados cadastrados no volume local.
+## Profiles, logs e health check
+
+- `application.properties`: configuração comum.
+- `application-dev.properties`: logs `DEBUG` da aplicação e cache de templates desligado.
+- `application-prod.properties`: logs `INFO` e cache de templates ligado.
+- Erros não expõem stack trace, SQL ou caminhos internos; o usuário vê a página `error.html`.
+- Health check: `GET /actuator/health` retorna `{"status":"UP"}` (somente esse endpoint é exposto).
+
+## Deploy no Render
+
+Arquitetura: o **Render** executa a aplicação (Dockerfile) e o **Neon** guarda
+o banco. O `compose.yaml` é só para uso local; o Render usa o `Dockerfile`.
+
+1. Envie o projeto para o GitHub (sem `.env*` com credenciais).
+2. No Render: **New → Web Service**, conecte o repositório e escolha a branch `main`.
+3. **Runtime/Language: Docker** (o Render encontra o `Dockerfile`).
+4. Em **Environment Variables**, cadastre:
+   - `DB_URL` (JDBC do Neon de produção, com `?sslmode=require`)
+   - `DB_USER`
+   - `DB_PASSWORD`
+   - `SPRING_PROFILES_ACTIVE=prod`
+5. Em **Advanced → Health Check Path**, informe `/actuator/health`.
+6. **Create Web Service** e acompanhe o build em **Logs**.
+7. A aplicação fica em `https://<nome-do-servico>.onrender.com`.
+
+A porta vem da variável `PORT` do Render (`server.port=${PORT:8080}`). Idealmente,
+use bancos Neon diferentes para desenvolvimento e produção.
+
+Auto-deploy: cada push na `main` dispara um novo build e deploy no Render.
+No plano gratuito, o serviço é suspenso após cerca de 15 minutos sem tráfego e a
+primeira requisição seguinte demora mais para responder; isso é esperado.
+
+## Checklist antes da entrega
+
+- [ ] URL pública do Render abre
+- [ ] Cadastro, login e avaliações funcionam (CRUD, validações e relacionamentos)
+- [ ] Flyway executou e o Neon está conectado (ver Logs no Render)
+- [ ] `/actuator/health` responde `UP`
+- [ ] Nenhum segredo no Git (`git ls-files | grep -i env` só mostra `.env.example`)
+- [ ] README atualizado
