@@ -97,7 +97,7 @@
                 <article class="review-card" th:each="review : ${reviews}">
                     <header><span class="avatar avatar-copper" th:text="${#strings.substring(review.author, 0, 1)}">U</span><strong th:text="${review.author}">Usuário</strong></header>
                     <p th:if="${!#strings.isEmpty(review.comment)}" th:text="${review.comment}">Comentário</p>
-                    <footer><span class="stars" th:text="|★ ${review.rating} / 5|">Nota</span></footer>
+                    <footer><span class="stars" th:text="|★ ${review.rating} / 5.0|">Nota</span></footer>
                 </article>
             </div>
         </div>

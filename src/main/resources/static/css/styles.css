@@ -907,6 +907,36 @@ img {
     margin-left: 8px;
 }
 
+/* Home: nota em cima, "Ver filme" logo abaixo como botão discreto */
+.review-rows .review-card footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.review-rows .review-card footer a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid var(--divider-warm);
+    border-radius: 999px;
+    background: var(--primary-faint);
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 200ms ease, border-color 200ms ease, transform 200ms ease;
+}
+
+.review-rows .review-card footer a:hover {
+    background: var(--primary-soft);
+    border-color: var(--primary);
+    transform: translateX(3px);
+}
+
 .review-side-poster {
     position: relative;
     aspect-ratio: 2 / 3;
@@ -1324,6 +1354,11 @@ img {
     border-color: rgba(225, 112, 112, 0.34);
     color: #ef9a9a;
     background: rgba(225, 112, 112, 0.08);
+}
+
+/* Aviso "avaliação salva": respiro entre ele e o formulário */
+.detail-reviews .form-status:not(.form-status-error) {
+    margin-bottom: 22px;
 }
 
 .simulated-data-note {

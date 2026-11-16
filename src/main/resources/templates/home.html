@@ -109,7 +109,7 @@
                     <article class="review-card">
                         <header><span class="avatar avatar-copper" th:text="${#strings.substring(review.author, 0, 1)}">U</span><span><strong th:text="${review.author}">Usuário</strong><small th:text="|assistiu ${review.title}|">Filme</small></span></header>
                         <p th:text="${review.comment}">Comentário</p>
-                        <footer><span class="stars" th:text="|★ ${review.rating} / 5|">Nota</span><a th:href="@{/filmes/{slug}(slug=${review.slug})}">Ver filme →</a></footer>
+                        <footer><span class="stars" th:text="|★ ${review.rating} / 5.0|">Nota</span><a th:href="@{/filmes/{slug}(slug=${review.slug})}">Ver filme →</a></footer>
                     </article>
                     <a class="review-side-poster" th:href="@{/filmes/{slug}(slug=${review.slug})}">
                         <img th:src="${review.poster}" th:alt="|Pôster de ${review.title}|">
