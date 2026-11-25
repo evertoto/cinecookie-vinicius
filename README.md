@@ -72,8 +72,8 @@ lê valores do ambiente.
 | `PORT` | Não | Porta da aplicação; o Render define sozinho. Padrão: `8080` |
 | `APP_PORT` | Não | Porta publicada no computador pelo Compose. Padrão: `8080` |
 
-O arquivo `.env.example` mostra o formato. Os arquivos `.env`, `.env.dev` e
-`.env.prod` com credenciais reais **nunca** vão para o Git (estão no `.gitignore`).
+Os arquivos `.env`, `.env.dev` e `.env.prod` com credenciais reais ficam fora
+do Git (estão no `.gitignore`).
 
 ## Como executar
 
@@ -83,15 +83,15 @@ Pré-requisito: Docker Desktop (ou Docker Engine com Compose) e um banco
 PostgreSQL criado no [Neon](https://neon.tech). Não é necessário instalar Java
 nem Maven.
 
-1. Copie o exemplo e preencha com os dados do seu banco:
+1. Crie um arquivo `.env.dev` na raiz do projeto e preencha com os dados do seu banco:
 
-   ```bash
-   cp .env.example .env.dev
+   ```dotenv
+   DB_URL=jdbc:postgresql://HOST/BANCO?sslmode=require
+   DB_USER=usuario
+   DB_PASSWORD=senha
    ```
 
-   No PowerShell: `Copy-Item .env.example .env.dev`. Use a URL no formato JDBC
-   (`jdbc:postgresql://HOST/BANCO?sslmode=require`) e prefira o host direto do
-   Neon, sem `-pooler`, porque o Flyway precisa de conexão direta.
+   Use o host direto do Neon, sem `-pooler`, para executar as migrations do Flyway.
 
 2. Suba a aplicação:
 
@@ -106,23 +106,12 @@ Comandos úteis:
 
 ```bash
 docker compose --env-file .env.dev up -d      # segundo plano
-docker compose ps                             # serviço, status e porta
-docker compose logs -f app                    # logs
-docker compose down                           # encerra (os dados ficam no Neon)
+docker compose --env-file .env.dev ps         # serviço, status e porta
+docker compose --env-file .env.dev logs -f app # logs
+docker compose --env-file .env.dev down       # encerra (os dados ficam no Neon)
 ```
 
 Se a porta 8080 estiver ocupada, defina `APP_PORT=8081` no `.env.dev`.
-
-### PostgreSQL local (opcional)
-
-Para desenvolver sem usar o Neon, use o arquivo `compose.local-db.yaml`, que
-adiciona um PostgreSQL em container. No `.env.dev`, use
-`DB_URL=jdbc:postgresql://database:5432/cinecookie`, `DB_USER=cinecookie` e
-`DB_PASSWORD=cinecookie`, e execute:
-
-```bash
-docker compose -f compose.yaml -f compose.local-db.yaml --env-file .env.dev up --build
-```
 
 ### Sem Docker (Java 17+)
 
@@ -197,12 +186,3 @@ use bancos Neon diferentes para desenvolvimento e produção.
 Auto-deploy: cada push na `main` dispara um novo build e deploy no Render.
 No plano gratuito, o serviço é suspenso após cerca de 15 minutos sem tráfego e a
 primeira requisição seguinte demora mais para responder; isso é esperado.
-
-## Checklist antes da entrega
-
-- [ ] URL pública do Render abre
-- [ ] Cadastro, login e avaliações funcionam (CRUD, validações e relacionamentos)
-- [ ] Flyway executou e o Neon está conectado (ver Logs no Render)
-- [ ] `/actuator/health` responde `UP`
-- [ ] Nenhum segredo no Git (`git ls-files | grep -i env` só mostra `.env.example`)
-- [ ] README atualizado

@@ -1,5 +1,3 @@
-# Executa a aplicação em container. O banco é o Neon (cloud), não um container.
-# Uso: docker compose --env-file .env.dev up --build
 services:
   app:
     build: .
